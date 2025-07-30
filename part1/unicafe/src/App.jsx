@@ -8,23 +8,31 @@ const Button = (props) => {
   )
 }
 
+const StatisticsLine = (props) => {
+  let [label, value] = [props.label, props.value]
+  
+  return (
+    <p>{label}: {value}</p>
+  )
+}
+
 const Statistics = (props) => {
 
   const [good, neutral, bad] = [props.good, props.neutral, props.bad]
 
   const all = good + bad + neutral
   const avg = (good * 1) + (bad * -1) / all
-  const pos = (good) / all
+  const pos = (good) / all * 100 + "%"
 
   function getStatistics () {
     return (
       <div>
-          <p>Good: {good}</p>
-          <p>Neutral: {neutral}</p>
-          <p>Bad: {bad}</p>
-          <p>All: {all}</p>
-          <p>Average: {avg}</p>
-          <p>Positive: {pos*100}%</p>
+          <StatisticsLine label="Good" value={good}/>
+          <StatisticsLine label="Neutral" value={neutral}/>
+          <StatisticsLine label="Bad" value={bad}/>
+          <StatisticsLine label="All" value={all}/>
+          <StatisticsLine label="Average" value={avg}/>
+          <StatisticsLine label="Positive" value={pos}/>
       </div>
     )
   }
