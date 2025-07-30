@@ -4,7 +4,7 @@ const Button = (props) => {
   let [label, value, handleClick] = [props.label, props.value, props.handleClick]
 
   return (
-    <button onClick={() => handleClick(value+1)}>{label}</button>
+    <button className="btn btn-outline-secondary mx-2" onClick={() => handleClick(value+1)}>{label}</button>
   )
 }
 
@@ -12,7 +12,10 @@ const StatisticsLine = (props) => {
   let [label, value] = [props.label, props.value]
   
   return (
-    <p>{label}: {value}</p>
+    <tr>
+      <td>{label}</td>
+      <td>{value}</td>
+    </tr>
   )
 }
 
@@ -26,14 +29,14 @@ const Statistics = (props) => {
 
   function getStatistics () {
     return (
-      <div>
+      <table className="table">
           <StatisticsLine label="Good" value={good}/>
           <StatisticsLine label="Neutral" value={neutral}/>
           <StatisticsLine label="Bad" value={bad}/>
           <StatisticsLine label="All" value={all}/>
           <StatisticsLine label="Average" value={avg}/>
           <StatisticsLine label="Positive" value={pos}/>
-      </div>
+      </table>
     )
   }
 
@@ -54,15 +57,17 @@ const App = () => {
   const [bad, setBad] = useState(0)
 
   return (
-    <>
+    <div className="container mx-1 my-2">
       <h1>
         Give Feedback
       </h1>
-      <Button label="Good" value={good} handleClick={setGood}></Button>
-      <Button label="Neutral" value={neutral} handleClick={setNeutral}></Button>
-      <Button label="Bad" value={bad} handleClick={setBad}></Button>
+      <div className="mb-2">
+        <Button label="Good" value={good} handleClick={setGood}></Button>
+        <Button label="Neutral" value={neutral} handleClick={setNeutral}></Button>
+        <Button label="Bad" value={bad} handleClick={setBad}></Button>
+      </div>
       <Statistics good={good} neutral={neutral} bad={bad}></Statistics>
-    </>
+    </div>
   )
 }
 
