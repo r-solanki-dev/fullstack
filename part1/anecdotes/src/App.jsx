@@ -12,21 +12,36 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ]
 
+  const [votes, setVotes] = useState(anecdotes.map(() => 0))
+
   const [selected, setSelected] = useState(0)
 
-  function randomizeIndex () {
-    setSelected(Math.floor(Math.random()*anecdotes.length))
+  function nextAnecdote () {
+    setSelected(Math.floor(Math.random() * anecdotes.length))
+  }
+
+  function vote () {
+    let votesCopy = [...votes]
+    votesCopy[selected] = votesCopy[selected]+1
+    setVotes(votesCopy)
   }
 
   return (
     <>
       <div>
-        {anecdotes[selected]}
+        <p>{anecdotes[selected]}</p>
+        <p>{votes[selected]}</p>
       </div>
       <button 
-        className="btn btn-outline-secondary"
-        onClick={randomizeIndex}>
+        className="btn btn-outline-primary mx-2"
+        onClick={nextAnecdote}>
           Next anecdote
+      </button>
+      <button
+        className="btn btn-outline-secondary mx-2"
+        onClick={vote}
+      >
+        Vote
       </button>
     </>
   )
