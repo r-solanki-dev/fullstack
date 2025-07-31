@@ -22,29 +22,45 @@ const App = () => {
 
   function vote () {
     let votesCopy = [...votes]
-    votesCopy[selected] = votesCopy[selected]+1
+    votesCopy[selected] += 1
     setVotes(votesCopy)
+  }
+
+  function getMaxVotesIndex() {
+    if (votes.every((n) => n === 0 )) {return -1}
+    else return votes.indexOf(Math.max(...votes))
   }
 
   return (
     <>
       <div>
+        <h1>Anecdote of the day</h1>
         <p>{anecdotes[selected]}</p>
         <p>{votes[selected]}</p>
       </div>
-      <button 
-        className="btn btn-outline-primary mx-2"
-        onClick={nextAnecdote}>
-          Next anecdote
-      </button>
-      <button
-        className="btn btn-outline-secondary mx-2"
-        onClick={vote}
-      >
-        Vote
-      </button>
+      <div>
+        <button 
+          className="btn btn-outline-primary mx-2"
+          onClick={nextAnecdote}>
+            Next anecdote
+        </button>
+        <button
+          className="btn btn-outline-secondary mx-2"
+          onClick={vote}
+        >
+          Vote
+        </button>
+      </div>
+      <div>
+        { 
+          getMaxVotesIndex() === -1 ? null : 
+          <>
+            <h1>Anecdote with the most votes</h1>
+            <p>{"\"" + anecdotes[getMaxVotesIndex()] + "\" has " + votes[getMaxVotesIndex()] + " votes."}</p> 
+          </>
+        }
+      </div>
     </>
   )
 }
-
 export default App
