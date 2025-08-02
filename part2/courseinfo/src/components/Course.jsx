@@ -13,7 +13,7 @@ const Course = (props) => {
   
   return (
     <>
-      <h1>{name}</h1>
+      <h2>{name}</h2>
       {parts.map(part => 
         <p key={part.id}>
           {(part.name + " " + String(part.exercises))}
