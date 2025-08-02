@@ -2,10 +2,14 @@ import React from 'react'
 
 const Course = (props) => {
   const [name, parts] = [props.course.name, props.course.parts]
+
+  const exercisesList = parts.map((part) => {return part.exercises})  
+
+  const totalExercises = exercisesList.reduce((prev, curr) => {
+    prev += curr
+    return(prev)
+  })
   
-  function getPartsData (part) {
-    return [part.name, part.exercises]
-  }
   
   return (
     <>
@@ -15,6 +19,7 @@ const Course = (props) => {
           {(part.name + " " + String(part.exercises))}
         </p>
       )}
+      <p><strong>total of {totalExercises} exercises</strong></p>
     </>
   )
 }
