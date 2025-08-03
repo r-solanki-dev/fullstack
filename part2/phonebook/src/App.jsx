@@ -7,7 +7,15 @@ const App = () => {
 
   const handleSetPersons = (event) => {
     event.preventDefault()
-    setPersons(persons.concat({name: newName}))
+
+    const names = persons.map((person) => {return person.name})
+
+    if (names.includes(newName) === true) {
+      alert(`${newName} is already in the phonebook.`)
+    }
+    else {
+      setPersons(persons.concat({name: newName}))
+    }
     event.target.value = ''
     setNewName('')
   }
@@ -23,7 +31,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={handleSetPersons}>
         <div>
-          name: <input value={newName} onChange={handleSetNewName}/>
+          name: <input id='nameField' value={newName} onChange={handleSetNewName}/>
         </div>
         <div>
           <button type='submit'>add</button>
