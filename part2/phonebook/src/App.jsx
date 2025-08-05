@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import Persons from './components/Persons'
+import PersonForm from './components/PersonForm'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -9,6 +11,18 @@ const App = () => {
   ]) 
 
   const names = persons.map((person) => {return person.name})
+
+  const [newName, setNewName] = useState('')
+
+  const handleSetNewName = (event) => {
+    setNewName(event.target.value)
+  }
+
+  const [newNumber, setNewNumber] = useState('')
+
+  const handleSetNewNumber = (event) => {
+    setNewNumber(event.target.value)
+  }
 
   const handleSetPersons = (event) => {
     event.preventDefault()
@@ -23,18 +37,6 @@ const App = () => {
 
     setNewName('')
     setNewNumber('')
-  }
-  
-  const [newName, setNewName] = useState('')
-
-  const handleSetNewName = (event) => {
-    setNewName(event.target.value)
-  }
-
-  const [newNumber, setNewNumber] = useState('')
-
-  const handleSetNewNumber = (event) => {
-    setNewNumber(event.target.value)
   }
 
   const [nameFilter, setNameFilter] = useState('')
@@ -69,9 +71,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {filteredPersons.map((person) =>
-        <p key={person.id}>{person.name} {person.number}</p>
-      )}
+      <Persons filteredPersons={filteredPersons}/>
     </div>
   )
 }
