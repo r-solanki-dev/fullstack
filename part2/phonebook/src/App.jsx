@@ -1,22 +1,25 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 
-const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ]) 
+const App = (props) => {
 
-  const names = persons.map((person) => {return person.name})
+  // data for the starting state of the application
+  const [persons, setPersons] = useState([]) 
+  const [nameFilter, setNameFilter] = useState('')
 
   const ids = persons.map((person) => {return person.id})
   const nextId = Math.max(...ids) + 1
+  const names = persons.map((person) => {return person.name})
+  const filteredPersons = persons.filter(person => {
+    const str1 = person.name.toLowerCase()
+    const str2 = nameFilter.toLowerCase()
+    return str1.includes(str2)
+  })
 
-  const handleSetPersons = (event) => {
+  function handleSetPersons(event) {
     event.preventDefault()
 
     const newName = event.target[0].value
@@ -30,18 +33,19 @@ const App = () => {
     }
   }
 
-  const [nameFilter, setNameFilter] = useState('')
-
   function handleSetNameFilter(event) {
     setNameFilter(event.target.value)
   }
 
-  const filteredPersons = persons.filter(person => {
-    const str1 = person.name.toLowerCase()
-    const str2 = nameFilter.toLowerCase()
+  function getDataHook() {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+  }
 
-    return str1.includes(str2)
-  })
+  useEffect(getDataHook, [])  
 
   return (
     <div>
