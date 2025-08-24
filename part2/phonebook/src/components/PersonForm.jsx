@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 const PersonForm = (props) => {
 
-  const handleSetPersons = props.onSubmit
+  const handleCreatePerson = props.onSubmit
 
   const [newName, setNewName] = useState('')
 
@@ -17,7 +17,7 @@ const PersonForm = (props) => {
   }
 
   function handleSubmit(event) {
-    handleSetPersons(event)
+    handleCreatePerson(event)
     setNewName('')
     setNewNumber('')
   }

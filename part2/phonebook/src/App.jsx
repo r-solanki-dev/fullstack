@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
@@ -21,28 +22,22 @@ const App = (props) => {
     return str1.includes(str2)
   })
 
-  function handleSetPersons(event) {
+  function handleCreatePerson(event) {
     event.preventDefault()
 
     const newName = event.target[0].value
     const newNumber = event.target[1].value
 
-    const newPersonObj = {name: newName, number: newNumber, id: nextId}
+    const newPersonObj = {name: newName, number: newNumber, id: nextId.toString()}
 
     if (names.includes(newName) === true) {
       alert(`${newName} is already in the phonebook.`)
     }
     else {
-      axios
-        .post('http://localhost:3001/persons', newPersonObj)
-        .then(response => {
-          if (response.status === 201) {
-            setPersons(persons.concat(newPersonObj))
-            console.log(response)
-          }
-          else {
-            alert(`Failed to add ${newName} to the phonebook.`)
-          }
+      personService
+        .create(newPersonObj)
+        .then(() => {
+          getDataHook()
         }
       )
     }
@@ -53,13 +48,10 @@ const App = (props) => {
   }
 
   function getDataHook() {
-    axios
-      .get('http://localhost:3001/persons')
+    personService
+      .getAll()
       .then(response => {
         setPersons(response.data)
-      })
-      .catch(error => {
-        console.log('Error getting persons')
       })
   }
 
@@ -70,9 +62,9 @@ const App = (props) => {
       <h2>Phonebook</h2>
       <Filter onChange={handleSetNameFilter}/>
       <h2>Add New</h2>
-      <PersonForm onSubmit={handleSetPersons}/>
+      <PersonForm onSubmit={handleCreatePerson}/>
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons}/>
+      <Persons filteredPersons={filteredPersons} refreshData={getDataHook}/>
     </div>
   )
 }
