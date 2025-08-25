@@ -24,14 +24,14 @@ const PersonForm = (props) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
+      <div className='mb-2'>
           name: <input id='nameField' value={newName} onChange={handleSetNewName}/>
       </div>
-      <div>
+      <div className='mb-2'>
           number: <input id='phoneField' value={newNumber} onChange={(handleSetNewNumber)}/>
       </div>
       <div>
-          <button type='submit'>add</button>
+          <button className='btn btn-outline-primary' type='submit'>Add</button>
       </div>
     </form>
   )

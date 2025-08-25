@@ -22,10 +22,10 @@ const Persons = (props) => {
 
   return(
     filteredPersons.map((person) =>
-      <div key={person.id}>
+      <div className='mb-2' key={person.id}>
         <p className="person-item">{person.name} {person.number}</p>
         <button 
-          className="person-item"
+          className="person-item btn btn-outline-danger"
           onClick={() => {
             handleDelete(person.name, person.id)}
           }   

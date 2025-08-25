@@ -15,12 +15,24 @@ const App = (props) => {
 
   const ids = persons.map((person) => {return person.id})
   const nextId = Math.max(...ids) + 1
-  const names = persons.map((person) => {return person.name})
+
   const filteredPersons = persons.filter(person => {
     const str1 = person.name.toLowerCase()
     const str2 = nameFilter.toLowerCase()
     return str1.includes(str2)
   })
+
+  function getDataHook() {
+    personService
+      .getAll()
+      .then(response => {
+        setPersons(response.data)
+      })
+  }
+
+  function getPersonByName(searchName) {
+    return persons.find((person) => person.name === searchName)
+  }
 
   function handleCreatePerson(event) {
     event.preventDefault()
@@ -30,10 +42,19 @@ const App = (props) => {
 
     const newPersonObj = {name: newName, number: newNumber, id: nextId.toString()}
 
-    if (names.includes(newName) === true) {
-      alert(`${newName} is already in the phonebook.`)
-    }
-    else {
+    const searchPersonResult = getPersonByName(newName)
+
+    if (searchPersonResult !== undefined) {
+      if (window.confirm(`${newName} is already in the phonebook, replace the old number with a new one?`)) {
+        personService
+          .update(searchPersonResult.id, newPersonObj)
+          .then(() => {
+            getDataHook()
+          });
+      } else {
+        console.log('Denied');
+      }
+    } else {
       personService
         .create(newPersonObj)
         .then(() => {
@@ -47,23 +68,15 @@ const App = (props) => {
     setNameFilter(event.target.value)
   }
 
-  function getDataHook() {
-    personService
-      .getAll()
-      .then(response => {
-        setPersons(response.data)
-      })
-  }
-
   useEffect(getDataHook, [])  
 
   return (
-    <div>
-      <h2>Phonebook</h2>
+    <div className='m-2'>
+      <h2 className='mt-3'>Phonebook</h2>
       <Filter onChange={handleSetNameFilter}/>
-      <h2>Add New</h2>
+      <h2 className='mt-3'>Add New</h2>
       <PersonForm onSubmit={handleCreatePerson}/>
-      <h2>Numbers</h2>
+      <h2 className='mt-3'>Numbers</h2>
       <Persons filteredPersons={filteredPersons} refreshData={getDataHook}/>
     </div>
   )
