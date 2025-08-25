@@ -5,14 +5,14 @@ import '../App.css'
 const Persons = (props) => {
   
   const filteredPersons = props.filteredPersons
-  const refreshData = props.refreshData
+  const handlePostServer = props.refreshData
 
   const handleDelete = (name, id) => {
     if (window.confirm(`Delete ${name}?`)) {
       personService
         .remove(id)
         .then(() => {
-          refreshData()
+          handlePostServer('success', `Deleted ${name}`)
         }
       )
     } else {

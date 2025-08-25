@@ -4,6 +4,7 @@ import axios from 'axios'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 
 import personService from './services/persons'
 
@@ -12,6 +13,8 @@ const App = (props) => {
   // data for the starting state of the application
   const [persons, setPersons] = useState([]) 
   const [nameFilter, setNameFilter] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState('')
+  const [notificationType, setNotificationType] = useState('')
 
   const ids = persons.map((person) => {return person.id})
   const nextId = Math.max(...ids) + 1
@@ -49,8 +52,8 @@ const App = (props) => {
         personService
           .update(searchPersonResult.id, newPersonObj)
           .then(() => {
-            getDataHook()
-          });
+            handlePostServer('success', `Updated ${newName} in the phonebook.`)
+          })
       } else {
         console.log('Denied');
       }
@@ -58,7 +61,7 @@ const App = (props) => {
       personService
         .create(newPersonObj)
         .then(() => {
-          getDataHook()
+          handlePostServer('success', `Added ${newName} to the phonebook.`)
         }
       )
     }
@@ -68,16 +71,27 @@ const App = (props) => {
     setNameFilter(event.target.value)
   }
 
+  function handlePostServer(notificationType, notificationMessage) {
+    getDataHook()
+    setNotificationType(notificationType)
+    setNotificationMessage(notificationMessage)
+    setTimeout(() => {
+      setNotificationMessage('')
+      setNotificationType('')
+    }, 5000)
+  }
+
   useEffect(getDataHook, [])  
 
   return (
     <div className='m-2'>
       <h2 className='mt-3'>Phonebook</h2>
+      {!notificationMessage ? null :<Notification notifMessage={notificationMessage} notifType={notificationType}/>}
       <Filter onChange={handleSetNameFilter}/>
       <h2 className='mt-3'>Add New</h2>
       <PersonForm onSubmit={handleCreatePerson}/>
       <h2 className='mt-3'>Numbers</h2>
-      <Persons filteredPersons={filteredPersons} refreshData={getDataHook}/>
+      <Persons filteredPersons={filteredPersons} refreshData={handlePostServer}/>
     </div>
   )
 }
