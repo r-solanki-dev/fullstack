@@ -6,4 +6,8 @@ function getAllCountries() {
   return axios.get(`${baseUrl}/all`)
 }
 
-export default { getAllCountries }
+function getCountryDetails(name) {
+  return axios.get(`${baseUrl}/name/${name}`)
+}
+
+export default { getAllCountries, getCountryDetails }
